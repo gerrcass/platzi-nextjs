@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { ResponseData } from 'typescript/types'
+
 
 import DB from "@database";
 const allAvos = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {

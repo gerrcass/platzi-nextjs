@@ -1,5 +1,3 @@
-import { TProduct, TProductId } from 'types/types'
-
 const data: Record<TProductId, TProduct> = {
     '2zd33b8c': {
         name: 'Maluma Hass Avocado',
