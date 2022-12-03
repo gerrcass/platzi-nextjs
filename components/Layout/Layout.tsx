@@ -1,10 +1,10 @@
 import React, { PropsWithChildren } from 'react'
-import Navbar from '@components/Navbar/Navbar'
+import Header from '@components/Header/Header'
 
 const Layout: React.FC<PropsWithChildren> = ({ children }) => {
     return (
         <div>
-            <Navbar />
+            <Header />
             {children}
             <footer>This is the footer</footer>
         </div>

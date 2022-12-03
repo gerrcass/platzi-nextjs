@@ -1,5 +1,6 @@
-import /* React, */ { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import Layout from '@components/Layout/Layout'
+import ProductList from '@components/ProductList/ProductList'
 
 const Home = () => {
     const [productList, setProductList] = useState<TProduct[]>([])
@@ -8,22 +9,17 @@ const Home = () => {
         window
             .fetch('/api/avo')
             .then((response) => response.json())
-            .then(({ data }) => {
+            .then(({ data }: TAPIAvoResponse) => {
                 setProductList(data)
             })
     }, [])
 
     return (
-        <div>
-            <h1 className="text-3xl font-bold underline">
-                Hello world!
-            </h1>
-            {productList.map((product) => (
-                <div key={product.id}>
-                    <Link href={`product/${product.id}`}>{product.name}</Link>
-                </div>
-            ))}
-        </div>
+        <Layout>
+            <ProductList products={productList} />
+        </Layout>
+
+
     )
 }
 

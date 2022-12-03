@@ -3,9 +3,9 @@ import Link from 'next/link'
 const Navbar = () => {
     return (
         <nav>
-            <menu>
-                <Link href='/'>Home</Link>
-                <Link href='/about'>About</Link>
+            <menu className='flex justify-between'>
+                <li><Link href='/'>Home</Link></li>
+                <li><Link href='/about'>About</Link></li>
             </menu>
         </nav>
 
