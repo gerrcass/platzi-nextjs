@@ -1,14 +1,16 @@
-//import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import useShop from '@store/Cart'
+import { useEffect } from 'react'
 
 type ProductListProps = {
     products: TProduct[]
 }
 
-const mapProductsToCards = (products: TProduct[]) => products.map(({ name, id, price, image }) => (
-    <div className="mx-auto w-full bg-white rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 mt-10">
-        <Link href={`/product/${id}`}>
+const mapProductsToCards = (products: TProduct[]) =>
+    products.map(({ name, id, price, image }) => (
+        <div key={id} className="mx-auto w-full bg-white rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 mt-10">
+            {/* <Link href={`/product/${id}`}> */}
             <Image className="rounded-t-lg mx-auto" src={image} alt="Avocado image" width={333} height={333} />
             <div className="px-10 pb-5">
                 <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{name}</h5>
@@ -25,12 +27,22 @@ const mapProductsToCards = (products: TProduct[]) => products.map(({ name, id, p
                     <Link href="/" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to cart</Link>
                 </div>
             </div>
-        </Link>
-    </div>
-))
+            {/* </Link> */}
+        </div>
+    ))
 
 
 const ProductList = ({ products }: ProductListProps) => {
+    const { items, total, count, addToCart, removeFromCart } = useShop()
+
+    useEffect(() => {
+        console.log('items>> ', items)
+        console.log('count>> ', count)
+        console.log('total>> ', total)
+
+
+    }, [])
+
     return (
         <div className='grid grid-cols-1 md:grid-cols-2 gap-x-10 container mx-auto max-w-md md:max-w-3xl py-5'>
             {mapProductsToCards(products)}

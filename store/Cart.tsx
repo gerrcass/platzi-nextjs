@@ -1,56 +1,83 @@
-import React, { /* Dispatch, */ useContext, useReducer } from 'react'
+import React, { createContext, useContext, useReducer } from 'react'
 
 export type CartItemType = TProduct & { quantity: number }
-/* same as 👆
-export interface CartItemType extends TProduct {
-    quantity: number
-} */
-export type AllCartItemsType = [CartItemType]
+
+export type AllCartItemsType = CartItemType[]
 
 export type CartState = {
-    subTotal: number
-    itemsInCart: AllCartItemsType
+    items: AllCartItemsType
+    total: number
 }
-/* export type CartState = {
-    [key: string]: CartItemType
-} */
+type ContextType = CartState & { count: number } & {
+    addToCart(product: TProduct, quantity: number): any
+    removeFromCart(product: TProduct): any
+}
 
 export type CartAction = {
     type: 'add' | 'remove'
-    item: TProduct
-    quantity?: number
+    payload: CartState
 }
 
 const defaultState = {} as CartState
-
-const ShopContext = React.createContext(defaultState)
-/* const CartDispatchContext = React.createContext((() => { }) as Dispatch<
-    CartAction
->) */
+const defaultContextState = {} as ContextType
+//
+const ShopContext = createContext(defaultContextState)
 
 export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
-    const [state, dispatch] = useReducer(cartReducers, defaultState)
+    const [state, dispatch] = useReducer(shopReducer, defaultState)
 
-    const addToCart = (product: TProduct, quantity?: number) =>
+    const addToCart = (product: TProduct, quantity: number) => {
+        const existingCartItem = state.items.find((itemInCart: CartItemType) => itemInCart.id === product.id)
+        let updatedCart: AllCartItemsType
+
+        if (existingCartItem === undefined) {
+            updatedCart = state.items.concat({
+                ...product,
+                quantity
+            })
+        } else {
+            updatedCart = state.items.map((currentItem: CartItemType) => {
+                if (currentItem.id === product.id) {
+                    return {
+                        ...currentItem,
+                        quantity: currentItem.quantity + quantity
+                    }
+                } else {
+                    return currentItem
+                }
+            })
+        }
+
         dispatch({
             type: 'add',
-            item: product,
-            quantity,
+            payload: {
+                items: updatedCart,
+                total: getCartTotal(updatedCart),
+            },
         })
 
-    const removeFromCart = (product: TProduct) =>
+    }
+    const removeFromCart = (product: TProduct) => {
+        const updatedCart = state.items.filter((currentItem: CartItemType) => currentItem.id !== product.id)
+
         dispatch({
             type: 'remove',
-            item: product,
+            payload: {
+                items: updatedCart,
+                total: getCartTotal(updatedCart),
+            },
         })
 
-    const getCartSubTotal = () => {
-        return state.itemsInCart.reduce((sum, item) => sum + (item.quantity * item.price), 0)
+    }
+
+    const getCartTotal = (products: AllCartItemsType) => {
+        return products.reduce((sum, item) => sum + (item.quantity * item.price), 0)
     }
 
     const value = {
-        subTotal: getCartSubTotal(),
-        itemsInCart: state.itemsInCart,
+        total: state.total,
+        count: state.items && state.items.length,
+        items: state.items,
         addToCart,
         removeFromCart
     }
@@ -72,160 +99,31 @@ const useShop = () => {
 }
 export default useShop
 
+
+
 const shopReducer = (
     state: CartState,
-    { item, type, quantity: qtyToAdd = 1 }: CartAction
+    { type, payload }: CartAction
 ) => {
-    const existingCartItem = state.itemsInCart.filter(itemInCart => itemInCart.id === item.id)[0]
     switch (type) {
         case 'add': {
-            let qty: number
-            existingCartItem === undefined ? qty = qtyToAdd : qty = existingCartItem.quantity + qtyToAdd
-
+            console.log('ADD_TO_CART', payload)
             return {
                 ...state,
-                itemsInCart: state.itemsInCart.map(currentItem => {
-                    if (currentItem.id === item.id) {
-                        return {
-                            ...currentItem,
-                            quantity: qty
-                        }
-                    }
-                })
+                items: payload.items,
+                total: payload.total
             }
         }
         case 'remove': {
-            if (existingCartItem == undefined) {
-                return state
-            }
-
-            const newQty = existingCartItem.quantity - 1
+            console.log('REMOVE_FROM_CART', payload)
             return {
                 ...state,
-                itemsInCart: state.itemsInCart.map(currentItem => {
-                    if (currentItem.id === item.id && newQty > 0) {
-                        return {
-                            ...currentItem,
-                            quantity: newQty
-                        }
-                    }
-                })
+                items: payload.items,
+                total: payload.total
             }
         }
-
-
-
+        default:
+            throw new Error(`No case for type ${type} found in shopReducer.`) // This is for developer only and shouldn't be seen by any end user
     }
 
 }
-
-function cartReducers(
-    state: CartState,
-    { item, type, quantity: qtyToAdd = 1 }: CartAction
-) {
-    const existingCartItem = state[item.id]
-
-    switch (type) {
-        case 'add': {
-            if (existingCartItem != undefined) {
-                const quantity = existingCartItem.quantity + qtyToAdd
-                return {
-                    ...state,
-                    [item.id]: {
-                        ...existingCartItem,
-                        quantity,
-                    },
-                }
-            }
-
-            return {
-                ...state,
-                [item.id]: {
-                    ...item,
-                    quantity: qtyToAdd,
-                },
-            }
-        }
-
-        case 'remove': {
-            if (existingCartItem == undefined) {
-                return state
-            }
-
-            const quantity = existingCartItem.quantity - 1
-            if (quantity > 0) {
-                return {
-                    ...state,
-                    [item.id]: {
-                        ...existingCartItem,
-                        quantity,
-                    },
-                }
-            }
-
-            const newCartItems = { ...state }
-            delete newCartItems[item.id]
-            return newCartItems
-        }
-
-        default: {
-            throw new Error(`Unhandled action type: ${type}`)
-        }
-    }
-}
-
-const getCartSubTotal = (sum: number, item: CartItemType) => {
-    sum += item.price * item.quantity
-    return sum
-}
-const getCartCount = (sum: number, item: CartItemType) => sum + item.quantity
-/**
- * Hey there insatiably brain,
- * Are you interested in this pattern where the Context values are
- * exposed without actually provinding access to the Context itself :)
- * https://kentcdodds.com/blog/how-to-use-react-context-effectively
- */
-
-
-
-
-
-
-export const useCart = () => {
-    const itemsById = useContext(ShopContext)
-    const items = Object.values(itemsById)
-    // Not familiar with Array.reduce? :)
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
-    const count = items.reduce(getCartCount, 0)
-    const subTotal = items.reduce(getCartSubTotal, 0)
-
-    return {
-        items,
-        itemsById,
-        count,
-        subTotal,
-    }
-}
-export const useCartMutations = () => {
-    const dispatch = useContext(CartDispatchContext)
-
-    const addToCart = (product: TProduct, quantity?: number) =>
-        dispatch({
-            type: 'add',
-            item: product,
-            quantity,
-        })
-
-    const removeFromCart = (product: TProduct) =>
-        dispatch({
-            type: 'remove',
-            item: product,
-        })
-
-    return {
-        addToCart,
-        removeFromCart,
-    }
-}
-
-//export default ShopProvider
