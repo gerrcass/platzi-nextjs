@@ -18,7 +18,7 @@ export type CartAction = {
     payload: CartState
 }
 
-const defaultState = {} as CartState
+const defaultState = { items: [], total: 0 } as CartState
 const defaultContextState = {} as ContextType
 //
 const ShopContext = createContext(defaultContextState)
@@ -75,9 +75,9 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const value = {
-        total: state.total,
-        count: state.items && state.items.length,
         items: state.items,
+        total: state.total,
+        count: state.items.length,
         addToCart,
         removeFromCart
     }
