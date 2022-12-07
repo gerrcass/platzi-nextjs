@@ -8,9 +8,10 @@ export type CartState = {
     items: AllCartItemsType
     total: number
 }
+
 type ContextType = CartState & { count: number } & {
-    addToCart(product: TProduct, quantity: number): any
-    removeFromCart(product: TProduct): any
+    addToCart(product: TProduct, quantity: number): void
+    removeFromCart(product: TProduct, quantity: number): void
 }
 
 export type CartAction = {
@@ -22,6 +23,33 @@ const defaultState = { items: [], total: 0 } as CartState
 const defaultContextState = {} as ContextType
 //
 const ShopContext = createContext(defaultContextState)
+
+
+const shopReducer = (
+    state: CartState,
+    { type, payload }: CartAction
+) => {
+    switch (type) {
+        case 'add': {
+            console.log('ADD_TO_CART', payload)
+            return {
+                ...state,
+                items: payload.items,
+                total: payload.total
+            }
+        }
+        case 'remove': {
+            console.log('REMOVE_FROM_CART', payload)
+            return {
+                ...state,
+                items: payload.items,
+                total: payload.total
+            }
+        }
+        default:
+            throw new Error(`No case for type ${type} found in shopReducer.`) // This is for developer only and shouldn't be seen by any end user
+    }
+}
 
 export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, dispatch] = useReducer(shopReducer, defaultState)
@@ -57,8 +85,24 @@ export const ShopProvider = ({ children }: { children: React.ReactNode }) => {
         })
 
     }
-    const removeFromCart = (product: TProduct) => {
-        const updatedCart = state.items.filter((currentItem: CartItemType) => currentItem.id !== product.id)
+    const removeFromCart = (product: TProduct, quantity: number = 1) => {
+
+        const updatedCart = state.items.reduce<AllCartItemsType>((itemsInCart, currentItem) => {
+            if (currentItem.id === product.id) {
+                /* 👇 There is no 'else' event, which means that currentItem
+                      simply doesn't get included when not enough quantity */
+                if (currentItem.quantity - quantity > 0) {
+                    itemsInCart.push({
+                        ...currentItem,
+                        quantity: currentItem.quantity - quantity
+                    })
+                }
+            } else {
+                itemsInCart.push(currentItem)
+            }
+            return itemsInCart
+
+        }, [])
 
         dispatch({
             type: 'remove',
@@ -97,33 +141,5 @@ const useShop = () => {
     }
     return context
 }
+
 export default useShop
-
-
-
-const shopReducer = (
-    state: CartState,
-    { type, payload }: CartAction
-) => {
-    switch (type) {
-        case 'add': {
-            console.log('ADD_TO_CART', payload)
-            return {
-                ...state,
-                items: payload.items,
-                total: payload.total
-            }
-        }
-        case 'remove': {
-            console.log('REMOVE_FROM_CART', payload)
-            return {
-                ...state,
-                items: payload.items,
-                total: payload.total
-            }
-        }
-        default:
-            throw new Error(`No case for type ${type} found in shopReducer.`) // This is for developer only and shouldn't be seen by any end user
-    }
-
-}
