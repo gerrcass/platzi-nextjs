@@ -18,8 +18,6 @@ const Home = () => {
         <Layout>
             <ProductList products={productList} />
         </Layout>
-
-
     )
 }
 
