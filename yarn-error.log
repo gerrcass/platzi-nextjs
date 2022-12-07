@@ -1,0 +1,52 @@
+Arguments: 
+  /home/sophie/.volta/tools/image/node/18.6.0/bin/node /home/sophie/.volta/tools/image/yarn/1.22.18/bin/yarn.js
+
+PATH: 
+  /home/sophie/.volta/tools/image/npm/8.14.0/bin:/home/sophie/.volta/tools/image/yarn/1.22.18/bin:/home/sophie/.volta/tools/image/node/18.6.0/bin:/home/sophie/.volta/bin:/home/sophie/.local/share/pnpm:/home/sophie/.volta/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files (x86)/Common Files/Intel/Shared Libraries/redist/intel64/compiler:/mnt/c/Python39/Scripts/:/mnt/c/Python39/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files (x86)/Calibre2/:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/GitHub CLI/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Users/Gerard/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Gerard/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin:/home/sophie/n/bin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  18.6.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: connect EHOSTUNREACH 104.16.26.35:443
+      at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1246:16)
+
+npm manifest: 
+  {
+    "name": "platzi-nextjs",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "dev": "NODE_OPTIONS='--inspect' next dev",
+      "build": "next build",
+      "start": "next start"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "next": "^13.0.5",
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+      "@types/react": "18.0.25",
+      "autoprefixer": "^10.4.13",
+      "postcss": "^8.4.19",
+      "tailwindcss": "^3.2.4",
+      "typescript": "4.9.3"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
