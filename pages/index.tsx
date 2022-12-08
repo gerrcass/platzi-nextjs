@@ -3,9 +3,10 @@ import Layout from '@components/Layout/Layout'
 import ProductList from '@components/ProductList/ProductList'
 import Link from 'next/link'
 import AvoLogo from '@components/Logo/Logo'
+import { SERVER_URL } from '../config/index'
 
 export const getServerSideProps = async () => {
-    const response = await fetch('https://platzi-avocado-nextjs-tau.vercel.app/api/avo')
+    const response = await fetch(`${SERVER_URL}/api/avo`)
     const { data: productList }: TAPIAvoResponse = await response.json()
 
     return {
