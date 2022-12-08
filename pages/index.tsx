@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Layout from '@components/Layout/Layout'
 import ProductList from '@components/ProductList/ProductList'
 import Link from 'next/link'
+import AvoLogo from '@components/Logo/Logo'
 
 export const getServerSideProps = async () => {
     const response = await fetch('https://platzi-avocado-nextjs-tau.vercel.app/api/avo')
@@ -18,8 +19,14 @@ export const getServerSideProps = async () => {
 const Home = ({ productList }: { productList: TProduct[] }) => {
     return (
         <Layout>
-            <div className='text-center text-base py-10'>
-                <Link href='/yes-or-no' className='text-blue-800 hover:text-blue-700'>¿Deberia comer un avo hoy?</Link>
+            <div className='text-center text-base pt-10'>
+                <div className="flex justify-center items-center text-3xl font-light mb-4 antialiased">
+                    <span>Avo</span>
+                    <AvoLogo className='w-20 h-20' />
+                    <span>Store</span>
+
+                </div>
+                <Link href='/yes-or-no' className='text-blue-800 hover:text-blue-700'><span className='text-sm'>Should I eat an avocado today?</span></Link>
             </div>
             <ProductList products={productList} />
         </Layout>

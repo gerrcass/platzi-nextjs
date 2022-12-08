@@ -17,7 +17,7 @@ const Product = ({ product }: ProductProps) => {
     }, [items])
 
     return (
-        <div className="relative mx-auto w-full bg-white rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 mt-10">
+        <div className="relative mx-auto w-full bg-white rounded-lg shadow-2xl dark:bg-gray-800 dark:border-gray-700 mt-10">
             <div className="absolute bottom-6 right-6">
                 {qtyInCart === 0
                     ?

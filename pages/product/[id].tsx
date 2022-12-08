@@ -31,11 +31,11 @@ const ProductItem = () => {
 
     return (
         <Layout>
-            <div className="container mx-auto max-w-md md:max-w-3xl">
+            <div className="container mx-auto max-w-sm md:max-w-3xl">
                 <section className="text-gray-700 body-font overflow-hidden bg-white">
-                    <div className="container py-24">
-                        <div className="mx-auto flex">
-                            {item?.image && <Image alt="Avocado Image" priority={true} className="lg:w-1/3 w-72 h-72 object-cover object-center" width={333} height={333} src={item?.image} />}
+                    <div className="container py-24 -mt-20">
+                        <div className="mx-auto flex flex-col md:flex-row">
+                            {item?.image && <Image alt="Avocado Image" priority={true} className="lg:w-1/3 w-72 h-72 object-cover object-center mx-auto" width={333} height={333} src={item?.image} />}
                             <div className="lg:w-2/3 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                                 <h2 className="text-sm title-font text-gray-500 tracking-widest">{item?.attributes.shape}</h2>
                                 <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{item?.name}</h1>

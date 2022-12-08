@@ -1,21 +1,16 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import useShop from '@store/Cart'
+import AvoLogo from '@components/Logo/Logo'
+
 const Header = () => {
     const { count } = useShop()
     return (
         <div className="bg-green-800 sticky top-0 z-10">
-            <div className="container mx-auto max-w-md md:max-w-3xl text-primary">
+            <div className="container mx-auto max-w-sm md:max-w-3xl text-primary">
                 <nav>
                     <menu className='flex justify-between items-center h-20'>
-                        <li><Link className='flex items-center' href='/'>
-                            <Image
-                                src="/images/logo-avocado.png"
-                                alt="Avocator logo"
-                                width={50}
-                                height={50}
-                                priority={true}
-                            />
+                        <li><Link href='/' className='flex items-center' aria-label="Home">
+                            <AvoLogo />
                             <p>Mr. Avo</p>
                         </Link></li>
                         <li><Link href='/cart'>
