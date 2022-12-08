@@ -36,7 +36,6 @@ const YesOrNo = ({ result: initialYesOrNo }: { result: string }) => {
     const [yesOrNot, setYesOrNot] = useState('')
 
     useEffect(() => {
-        console.log('initialYesOrNo: ', initialYesOrNo)
         setLoading(false)
         setYesOrNot(initialYesOrNo)
     }, [])
@@ -44,7 +43,6 @@ const YesOrNo = ({ result: initialYesOrNo }: { result: string }) => {
     const buttonHandler = async () => {
         setLoading(true)
         const data = await apiYesOrNo()
-        console.log('data (apiYesOrNo): ', data)
         data ? setYesOrNot(data) : setYesOrNot('🤷')
         setLoading(false)
     }
