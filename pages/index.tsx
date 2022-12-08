@@ -4,7 +4,7 @@ import ProductList from '@components/ProductList/ProductList'
 import AvoLogo from '@components/Logo/Logo'
 import { SERVER_URL } from '../config/index'
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
     const response = await fetch(`${SERVER_URL}/api/avo`)
     const { data: productList }: TAPIAvoResponse = await response.json()
 

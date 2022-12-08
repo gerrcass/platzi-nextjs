@@ -1,16 +1,49 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { GetStaticProps } from 'next'
+
 import { useRouter } from 'next/router'
 import Layout from '@components/Layout/Layout'
 import Image from 'next/image'
 import useShop from '@store/Cart'
+import { SERVER_URL } from '../../config/index'
 
-const ProductItem = () => {
-    const [item, setItem] = useState<TProduct>()
+export const getStaticPaths = async () => {
+
+    const response = await fetch(`${SERVER_URL}/api/avo`)
+    const { data: productList }: TAPIAvoResponse = await response.json()
+
+    const paths = productList.map(({ id }) => ({
+        params: { id }
+    }))
+
+    return {
+        paths,
+        fallback: false //404 for everything else
+    }
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const id = params?.id as string
+    const response = await fetch(`${SERVER_URL}/api/avo/${id}`)
+    const item: TProduct = await response.json()
+
+    return {
+        props: {
+            item
+        }
+    }
+
+}
+
+
+const ProductItem = ({ item }: { item: TProduct }) => {
+    //const [item, setItem] = useState<TProduct>()
     const [qtyToAdd, setQtyToAdd] = useState<number>(1)
-    const { query: { id }, push } = useRouter()
+    //const { query: { id }, push } = useRouter()
+    const { push } = useRouter()
     const { addToCart } = useShop()
 
-    useEffect(() => {
+    /* useEffect(() => {
         id && window
             .fetch(`/api/avo/${id}`)
             .then((response) => response.json())
@@ -18,7 +51,9 @@ const ProductItem = () => {
                 setItem(data)
             })
             .catch(err => console.error(err.message))
-    }, [id])
+    }, [id]) */
+
+
     const buttonHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         item && addToCart(item, qtyToAdd)
         push('/')
