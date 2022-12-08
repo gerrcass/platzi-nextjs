@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import Layout from '@components/Layout/Layout'
 import ProductList from '@components/ProductList/ProductList'
-import Link from 'next/link'
 import AvoLogo from '@components/Logo/Logo'
 import { SERVER_URL } from '../config/index'
 
