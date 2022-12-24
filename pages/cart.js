@@ -16,7 +16,7 @@ const Cart = () => {
                         items.map((product) =>
                             <li key={product.id} className='bg-gray-100 flex justify-between items-center rounded-xl hover:shadow-md hover:-translate-y-1 duration-200 overflow-hidden mt-4'>
                                 <div className='flex items-center cursor-pointer'>
-                                    <Image src='/images/bacon.jpg' width={100} height={100} className='brightness-[98%]' alt='Avocado Image' />
+                                    <Image src={product.image} width={100} height={100} className='brightness-[98%]' alt='Avocado Image' />
                                     <h3 className='text-xl font-bold'>{product.name}</h3>
                                 </div>
                                 <div className='flex justify-center mx-4 md:mx-8'>
